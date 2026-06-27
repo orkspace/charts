@@ -4,8 +4,8 @@ metadata:
   name: {{ .Release.Name }}-katalog
   version: 0.1.0
   author: orkspace
-  description: > 
-    katalog.yaml — renders an Orkestra Katalog from Helm values.
+  description: >
+    katalog.yaml Helm template — renders an Orkestra Katalog from Helm values.
     Orkestra's merger reads this template's output and extracts CRD definitions.
     The chart must render at least one template with kind Katalog.
   tags:
@@ -15,17 +15,17 @@ metadata:
 
 spec:
   crds:
-    {{- range .Values.crds }}
-    {{ .name }}:
-      enabled: {{ .enabled | default true }}
-      namespaced: {{ .namespaced | default true }}
-      workers: {{ .workers | default 2 }}
-      resync: {{ .resync | default "30s" }}
+    {{- range $name, $crd := .Values.crds }}
+    {{ $name }}:
+      enabled: {{ $crd.enabled | default true }}
+      namespaced: {{ $crd.namespaced | default true }}
+      workers: {{ $crd.reconciler.workers | default 2 }}
+      resync: {{ $crd.reconciler.resync | default "30s" }}
 
       apiTypes:
         group: {{ $.Values.apiGroup }}
         version: {{ $.Values.apiVersion | default "v1alpha1" }}
-        kind: {{ .kind }}
-        plural: {{ .plural }}
-      description: {{ .description | default "" | quote }}
+        kind: {{ $crd.kind }}
+        plural: {{ $crd.plural }}
+      description: {{ $crd.description | default "" | quote }}
     {{- end }}

@@ -7,31 +7,27 @@ apiGroup: demo.orkestra.io
 # apiVersion — the API version for all CRDs in this chart.
 apiVersion: v1alpha1
 
-# crds — list of CRD definitions to include in the rendered Katalog.
-# Each entry produces one CRDEntry in the output.
+# crds — map of CRD definitions to include in the rendered Katalog.
+# Each key is the CRD name and produces one CRDEntry in the output.
 crds:
-  - name: database
+  database:
     enabled: true
     kind: Database
     plural: databases
     namespaced: false
-    workers: 2
-    resync: 1m
     reconciler:
-      default: true
-      mode: dynamic
+      workers: 3
+      resync: 1m
     description: >-
       Manages a database instance. Provisioned by the platform team Helm chart.
 
-  - name: cache
+  cache:
     enabled: true
     kind: Cache
     plural: caches
     namespaced: true
-    workers: 2
-    resync: 30s
     reconciler:
-      default: true
-      mode: dynamic
+      workers: 3
+      resync: 2m
     description: >-
       Manages a cache instance. Provisioned by the platform team Helm chart.
